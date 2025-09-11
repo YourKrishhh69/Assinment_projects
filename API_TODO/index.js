@@ -55,6 +55,30 @@ app.put("/update-user",(req,res)=>{
 }
 )
 
+app.delete("/delte-user",(req,res)=>{
+    const {search_name} = req.body;
+    let userFound = false;
+    for(let i = 0 ; i<data.length;i++){
+        data[i].name === search_name;
+        data.splice(i,1)
+        userFound = true;
+        break;
+    }
+    if(!userFound){
+        res.status(402).json({
+            msg:"usernot found"
+        })
+    }
+    fs.writeFile("./database.json",JSON.stringify(data),(err)=>{
+        if(err){
+            return res.status(500).json({ error: err });
+        }
+    })
+    res.json({
+        msg:"successfully"
+    })
+})
+
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
